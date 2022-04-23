@@ -54,6 +54,17 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
     protected Color findBackgroundColor;
     protected Color findErrorBackgroundColor;
 
+    // https://stackoverflow.com/questions/7434845/setting-the-default-font-of-swing-program
+    public static void setUIFont (javax.swing.plaf.FontUIResource f){
+        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get (key);
+            if (value instanceof javax.swing.plaf.FontUIResource)
+                UIManager.put (key, f);
+        }
+    }
+
     public MainView(
             Configuration configuration, API api, History history,
             ActionListener openActionListener,
@@ -87,6 +98,8 @@ public class MainView<T extends JComponent & UriGettable> implements UriOpenable
         this.openFilesCallback = openFilesCallback;
         // Build GUI
         invokeLater(() -> {
+            setUIFont (new javax.swing.plaf.FontUIResource("Serif",Font.PLAIN,32));
+
             mainFrame = new JFrame("Java Decompiler");
             mainFrame.setIconImages(Arrays.asList(getImage("/org/jd/gui/images/jd_icon_32.png"), getImage("/org/jd/gui/images/jd_icon_64.png"), getImage("/org/jd/gui/images/jd_icon_128.png")));
             mainFrame.setMinimumSize(new Dimension(Constants.MINIMAL_WIDTH, Constants.MINIMAL_HEIGHT));
